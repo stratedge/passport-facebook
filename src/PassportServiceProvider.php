@@ -23,6 +23,9 @@ class PassportServiceProvider extends BasePassportServiceProvider
         parent::boot();
 
         $this->loadPassportFacebookMigrations();
+
+        //Need the Authorization to be fully registered first...
+        $this->enableFacebookGrant();
     }
 
     /**
@@ -35,7 +38,5 @@ class PassportServiceProvider extends BasePassportServiceProvider
         $this->registerUserRepository();
 
         parent::register();
-
-        $this->enableFacebookGrant();
     }
 }
