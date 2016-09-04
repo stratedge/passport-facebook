@@ -1,0 +1,25 @@
+{
+    "name": "stratedge/passport-facebook",
+    "description": "Adds support for a \"facebook\" grant to Laravel's Passport package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jarret Byrne",
+            "email": "jarret@solvomedia.com"
+        }
+    ],
+    "require": {
+        "laravel/passport": "^1.0"
+    },
+    "require-dev": {
+        "raveren/kint": "^1.0",
+        "phpunit/phpunit": "~4.8"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Stratedge\\PassportFacebook\\": "src/"
+        }
+    }
+}
