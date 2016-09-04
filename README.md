@@ -36,7 +36,7 @@ Assuming you have extended the core Passport service provider, add the following
 use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\EnablesFacebookGrant;
 use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\LoadsPassportFacebookMigrations;
 use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersUserRepository;
-//..
+//...
 class MyCustomPassportServiceProvider extends PassportService
 {
 	use EnablesFacebookGrant,
