@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "laravel/passport": "^1.0"
+        "laravel/passport": "^1.0",
+        "facebook/graph-sdk": "^5.3"
     },
     "require-dev": {
         "raveren/kint": "^1.0",
