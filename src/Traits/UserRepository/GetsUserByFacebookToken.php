@@ -81,6 +81,6 @@ trait GetsUserByFacebookToken
             throw PassportFacebookException::saveUserFailure();
         }
 
-        return $user;
+        return new User($user->id);
     }
 }
