@@ -5,6 +5,7 @@ namespace Stratedge\PassportFacebook\Traits\UserRepository;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\GraphNodes\GraphUser;
+use Laravel\Passport\Bridge\User;
 use RuntimeException;
 use Stratedge\PassportFacebook\Exceptions\PassportFacebookException;
 
