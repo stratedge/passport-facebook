@@ -57,14 +57,14 @@ trait GetsUserByFacebookToken
 
         $user = new $model;
 
-        $user->name = $fb_user->getName();
 
         if (!$fb_user->getEmail()) {
             throw PassportFacebookException::missingEmailScope();
         }
 
+        $user->name = $fb_user->getName();
         $user->email = $fb_user->getEmail();
-
+        $user->password = "";
         $user->facebook_id = $fb_user->getId();
 
         if (!$user->save()) {
