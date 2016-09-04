@@ -15,6 +15,23 @@ trait GetsUserByFacebookToken
 
     public function getUserEntityByFacebookToken($token)
     {
+        $fb_user = $this->retrieveFacebookUser($token);
+
+        if (!$fb_user) {
+            return;
+        }
+
+        $user = $this->getUserEntityByFacebookId($fb_user->getId());
+
+        if (!$user) {
+            $user = $this->createUserEntityFromFacebookUser($fb_user);
+        }
+
+        return $user;
+    }
+
+    protected function retrieveFacebookUser($token)
+    {
         $fb = app(Facebook::class);
 
         try {
@@ -24,15 +41,7 @@ trait GetsUserByFacebookToken
             return;
         }
 
-        $fb_user = $response->getGraphUser();
-
-        $user = $this->getUserEntityByFacebookId($fb_user->getId());
-
-        if (!$user) {
-            $user = $this->createUserEntityFromFacebookUser($fb_user);
-        }
-
-        return $user;
+        return $response->getGraphUser();
     }
 
     protected function getUserEntityByFacebookId($id)
