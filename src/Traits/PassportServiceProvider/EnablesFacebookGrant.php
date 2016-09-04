@@ -4,6 +4,7 @@ namespace Stratedge\PassportFacebook\Traits\PassportServiceProvider;
 
 use Stratedge\PassportFacebook\Grants\FacebookGrant;
 use Laravel\Passport\Passport;
+use League\OAuth2\Server\AuthorizationServer;
 
 trait EnablesFacebookGrant
 {
