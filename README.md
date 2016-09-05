@@ -35,17 +35,21 @@ Assuming you have extended the core Passport service provider, add the following
 //...
 use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\EnablesFacebookGrant;
 use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\LoadsPassportFacebookMigrations;
+use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersClientRepository;
+use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersFacebookCommand;
 use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersUserRepository;
 //...
 class MyCustomPassportServiceProvider extends PassportService
 {
 	use EnablesFacebookGrant,
 		LoadsPassportFacebookMigrations,
+		RegistersClientRepository,
+		RegistersFacebookCommand
 		RegistersUserRepository;
 //...
 ```
 
-Then, in your `boot()` method, call `loadPassportFacebookMigrations()` and `enableFacebookGrant()` after the parent's `boot()`:
+Then, in your `boot()` method, call `loadPassportFacebookMigrations()`, `registerFacebookCommand()`, and `enableFacebookGrant()` after the parent's `boot()`:
 
 ```php
 	/**
@@ -58,12 +62,14 @@ Then, in your `boot()` method, call `loadPassportFacebookMigrations()` and `enab
 		parent::boot();
 
 		$this->loadPassportFacebookMigrations();
+		
+		$this->registerFacebookCommand();
 
 		$this->enableFacebookGrant();
     }
 ```
 
-And in your `register()` method, call `registerUserRepository()` before the parent's `register()`:
+And in your `register()` method, call `registerUserRepository()` and `registerClientRepository()` before the parent's `register()`:
 
 ```php
 	/**
@@ -74,6 +80,8 @@ And in your `register()` method, call `registerUserRepository()` before the pare
 	public function register()
 	{
 		$this->registerUserRepository();
+		
+		$this->registerClientRepository();
 
 		parent::register();
 	}
@@ -86,3 +94,51 @@ Once the service is registered, run Artisan's migrate command to add the `facebo
 ```sh
 php artisan migrate
 ```
+
+## Including Passport-Facebook with Other Passport Updates
+
+If you use the Passport-Facebook service provider, it will register new `ClientRepository` and `UserRepository` classes which extend the base classes from Passport and add new functions. If you wish to customize either of those classes further, then you just need to make sure that the changes Passport-Facebook depends upon are included with your custom implementations.
+
+### ClientRepository
+
+Because the Facebook grant must be turned on for individual clients, the `ClientRepository` needs to check if the client has access to the Facebook grant. This is done in the `handlesGrant()` method.
+
+Overload the `handlesGrant()` method and include a case for the Facebook grant:
+
+```php
+protected function handlesGrant($record, $grantType)
+{
+    switch ($grantType) {
+        case 'authorization_code':
+            return ! $record->firstParty();
+        case 'personal_access':
+            return $record->personal_access_client;
+        case 'password':
+            return $record->password_client;
+        case 'facebook':
+            return $record->facebook_client;
+        default:
+            return true;
+    }
+}
+```
+
+> Note: If you are overriding the `ClientRepository` class, **do not** use Passport-Facebook's service provider as it will register its own `ClientRepository`. Instead, create a custom Passport service provider as explained above and exclude both the `RegistersClientRepository` trait and the call to `registerClientRepository()`.
+
+### UserRepository
+
+In order to verify a user's Facebook token, the `UserRepository` needs to include appropriate verifications methods.
+
+All the required methods are bundled into a trait, which you must include in your custom `UserRepository` class:
+
+```php
+use Laravel\Passport\Bridge\UserRepository as BaseUserRepository;
+use Stratedge\PassportFacebook\Traits\UserRepository\GetsUserByFacebookToken;
+
+class UserRepository extends BaseUserRepository
+{
+    use GetsUserByFacebookToken;
+}
+```
+
+> Note: If you are overriding the `UserRepository` class, **do not** use Passport-Facebook's service provider as it will register its own `UserRepository`. Instead, create a custom Passport service provider as explained above and exclude both the `RegistersUserRepository` trait and the call to `registerUserRepository()`.
