@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\ClientRepository;
 
-class ClientCommand extends Command
+class FacebookCommand extends Command
 {
     /**
      * The name and signature of the console command.
