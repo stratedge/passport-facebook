@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fd6de37eb9afcb5a2e648ade56673db3",
-    "content-hash": "9ab86ff94eb46eb4fe0d7356821fee72",
+    "hash": "b511d6f087a5f9d14fd4bd373d0d6c15",
+    "content-hash": "e9ab685295ee7b7bdd1681ed9d64e119",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1222,6 +1222,46 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "stratedge/laravel-facebook",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stratedge/laravel-facebook.git",
+                "reference": "ea326362b54d58324e762d4424f414d40542e0e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stratedge/laravel-facebook/zipball/ea326362b54d58324e762d4424f414d40542e0e3",
+                "reference": "ea326362b54d58324e762d4424f414d40542e0e3",
+                "shasum": ""
+            },
+            "require": {
+                "facebook/graph-sdk": "^5.3",
+                "illuminate/support": "^5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stratedge\\LaravelFacebook\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jarret Byrne",
+                    "email": "jarret@solvomedia.com"
+                }
+            ],
+            "description": "A simple Laravel service provider for the Facebook Graph SDK",
+            "support": {
+                "source": "https://github.com/stratedge/laravel-facebook/tree/master",
+                "issues": "https://github.com/stratedge/laravel-facebook/issues"
+            },
+            "time": "2016-09-05 19:46:59"
         },
         {
             "name": "symfony/console",
@@ -3020,7 +3060,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "stratedge/laravel-facebook": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

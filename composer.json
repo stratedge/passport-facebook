@@ -11,7 +11,8 @@
     ],
     "require": {
         "laravel/passport": "^1.0",
-        "facebook/graph-sdk": "^5.3"
+        "facebook/graph-sdk": "^5.3",
+        "stratedge/laravel-facebook": "dev-master"
     },
     "require-dev": {
         "raveren/kint": "^1.0",
@@ -21,6 +22,12 @@
     "autoload": {
         "psr-4": {
             "Stratedge\\PassportFacebook\\": "src/"
+        }
+    },
+    "repositories": {
+        "laravel-facebook": {
+            "type": "vcs",
+            "url": "https://github.com/stratedge/laravel-facebook.git"
         }
     }
 }
