@@ -3,6 +3,7 @@
 namespace Stratedge\PassportFacebook\Console;
 
 use Illuminate\Console\Command;
+use Laravel\Passport\Client;
 
 class FacebookCommand extends Command
 {
@@ -26,7 +27,7 @@ class FacebookCommand extends Command
      * @param  \Laravel\Passport\ClientRepository  $clients
      * @return void
      */
-    public function handle(ClientRepository $clients)
+    public function handle()
     {
         $client = Client::find($this->argument("client_id"));
 
