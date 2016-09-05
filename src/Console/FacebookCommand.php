@@ -1,11 +1,8 @@
 <?php
 
-namespace Laravel\Passport\Console;
+namespace Stratedge\PassportFacebook\Console;
 
-use DateTime;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\ClientRepository;
 
 class FacebookCommand extends Command
 {
