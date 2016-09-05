@@ -12,7 +12,9 @@ class FacebookCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'passport:facebook {client_id : ID of the client}';
+    protected $signature = 'passport:facebook
+        {client_id : ID of the client}
+        {--r|revoke : Revoke access to the Facebook grant}';
 
     /**
      * The console command description.
@@ -35,10 +37,25 @@ class FacebookCommand extends Command
             throw new Exception("Could not find client with ID " . $this->argument("client_id"));
         }
 
-        $client->facebook_client = true;
+        if ($this->option("revoke")) {
+            $this->revokeAccessToFacebookGrant($client);
+        } else {
+            $this->giveAccessToFacebookGrant($client);
+        }
+    }
 
+    protected function giveAccessToFacebookGrant(Client $client)
+    {
+        $client->facebook_client = true;
+        $client->save();
+        $this->info("Client " . $this->argument("client_id") . " has been granted access to the Facebook grant.");
+    }
+
+    protected function revokeAccessToFacebookGrant(Client $client)
+    {
+        $client->facebook_client = false;
         $client->save();
 
-        $this->info("Client " . $this->argument("client_id") . " has been granted access to the Facebook grant.");
+        $this->info("Client " . $this->argument("client_id") . " has had access to the Facebook grant revoked.");
     }
 }
