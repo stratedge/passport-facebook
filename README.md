@@ -33,11 +33,11 @@ Assuming you have extended the core Passport service provider, add the following
 
 ```php
 //...
-use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\EnablesFacebookGrant;
-use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\LoadsPassportFacebookMigrations;
+use Stratedge\PassportFacebook\Traits\PassportServiceProvider\EnablesFacebookGrant;
+use Stratedge\PassportFacebook\Traits\PassportServiceProvider\LoadsPassportFacebookMigrations;
 use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersClientRepository;
 use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersFacebookCommand;
-use \Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersUserRepository;
+use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersUserRepository;
 //...
 class MyCustomPassportServiceProvider extends PassportService
 {
