@@ -6,16 +6,8 @@ use Stratedge\PassportFacebook\Grants\FacebookGrant;
 use Laravel\Passport\Passport;
 use League\OAuth2\Server\AuthorizationServer;
 
-trait EnablesFacebookGrant
+trait MakesFacebookGrant
 {
-    protected function enableFacebookGrant()
-    {
-        $this->app->make(AuthorizationServer::class)->enableGrantType(
-            $this->makeFacebookGrant(),
-            Passport::tokensExpireIn()
-        );
-    }
-
     protected function makeFacebookGrant()
     {
         $grant = new FacebookGrant(

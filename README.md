@@ -29,27 +29,27 @@ If you are using Passport-Facebook without any other modifications to the Passpo
 
 If you need to extend the Passport service provider to make other changes to the Passport service, it is still easy to register the Passport-Facebook service as each of its pieces are available as traits.
 
-Assuming you have extended the core Passport service provider, add the following three traits to your custom class:
+Assuming you have extended the core Passport service provider, add the following five traits to your custom class:
 
 ```php
 //...
-use Stratedge\PassportFacebook\Traits\PassportServiceProvider\EnablesFacebookGrant;
 use Stratedge\PassportFacebook\Traits\PassportServiceProvider\LoadsPassportFacebookMigrations;
+use Stratedge\PassportFacebook\Traits\PassportServiceProvider\MakesFacebookGrant;
 use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersClientRepository;
 use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersFacebookCommand;
 use Stratedge\PassportFacebook\Traits\PassportServiceProvider\RegistersUserRepository;
 //...
 class MyCustomPassportServiceProvider extends PassportService
 {
-	use EnablesFacebookGrant,
-		LoadsPassportFacebookMigrations,
+	use LoadsPassportFacebookMigrations,
+		MakesFacebookGrant,
 		RegistersClientRepository,
-		RegistersFacebookCommand
+		RegistersFacebookCommand,
 		RegistersUserRepository;
 //...
 ```
 
-Then, in your `boot()` method, call `loadPassportFacebookMigrations()`, `registerFacebookCommand()`, and `enableFacebookGrant()` after the parent's `boot()`:
+Then, in your `boot()` method, call `loadPassportFacebookMigrations()` and `registerFacebookCommand()` after the parent's `boot()`:
 
 ```php
 	/**
@@ -64,12 +64,10 @@ Then, in your `boot()` method, call `loadPassportFacebookMigrations()`, `registe
 		$this->loadPassportFacebookMigrations();
 		
 		$this->registerFacebookCommand();
-
-		$this->enableFacebookGrant();
     }
 ```
 
-And in your `register()` method, call `registerUserRepository()` and `registerClientRepository()` before the parent's `register()`:
+Then, in your `register()` method, call `registerUserRepository()` and `registerClientRepository()` before the parent's `register()`:
 
 ```php
 	/**
@@ -86,6 +84,49 @@ And in your `register()` method, call `registerUserRepository()` and `registerCl
 		parent::register();
 	}
 ```
+
+Finally, you must override the `PassportServiceProvider::registerAuthorizationServer()` method in order to enable the Facebook grant:
+
+```php
+/**
+ * Register the authorization server.
+ *
+ * @return void
+ */
+protected function registerAuthorizationServer()
+{
+    $this->app->singleton(AuthorizationServer::class, function () {
+        return tap($this->makeAuthorizationServer(), function ($server) {
+            $server->enableGrantType(
+                $this->makeAuthCodeGrant(), Passport::tokensExpireIn()
+            );
+
+            $server->enableGrantType(
+                $this->makeRefreshTokenGrant(), Passport::tokensExpireIn()
+            );
+
+            $server->enableGrantType(
+                $this->makePasswordGrant(), Passport::tokensExpireIn()
+            );
+
+            $server->enableGrantType(
+                new PersonalAccessGrant, new DateInterval('P100Y')
+            );
+
+            $server->enableGrantType(
+                new ClientCredentialsGrant, Passport::tokensExpireIn()
+            );
+
+            //Add Facebook grant
+            $server->enableGrantType(
+                $this->makeFacebookGrant(), Passport::tokensExpireIn()
+            );
+        });
+    });
+}
+```
+
+If you have other grants to register, add them there as well.
 
 ### Run Migrations
 
